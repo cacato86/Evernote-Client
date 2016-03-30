@@ -5,4 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="atention">Atention!</string>
+    <string name="should_register">You should register in Evernote for use this app</string>
+    <string name="retry">Retry</string>
+    <string name="exit">Exit</string>
 </resources>
