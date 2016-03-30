@@ -1,5 +1,6 @@
-package com.cct.evernoteclient.domain;
+package com.cct.evernoteclient.Domain;
 
+import com.cct.evernoteclient.Models.Filter;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public interface TaskRepositoryFactoryInterface {
     void login(TaskResultInterface<Boolean> taskResult);
 
-    void getNotes(TaskResultInterface<ArrayList<Note>> taskResult);
+    void getNotes(Filter filter, TaskResultInterface<ArrayList<Note>> taskResult);
 
     void getNoteBooks(TaskResultInterface<ArrayList<Notebook>> taskResult);
 

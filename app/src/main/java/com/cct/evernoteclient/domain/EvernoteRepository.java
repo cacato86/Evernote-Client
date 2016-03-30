@@ -1,13 +1,19 @@
-package com.cct.evernoteclient.domain;
+package com.cct.evernoteclient.Domain;
 
+import com.cct.evernoteclient.Models.Filter;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.asyncclient.EvernoteCallback;
 import com.evernote.client.android.asyncclient.EvernoteNoteStoreClient;
+import com.evernote.edam.notestore.NoteFilter;
+import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
+import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
+import com.cct.evernoteclient.Models.Filter.FilterBuilder.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by carloscarrasco on 30/3/16.
@@ -15,9 +21,11 @@ import java.util.List;
 public class EvernoteRepository implements TaskRepositoryFactoryInterface {
 
     private String notLoggedError = "You should register in Evernote for use this app";
+    private int MAX_NOTES = 100;
 
     private ErrorManager generateError(String errorMessage) {
         ErrorManager error = new ErrorManager();
+        errorMessage = (errorMessage != null) ? errorMessage : "";
         error.setReason(errorMessage);
         return error;
     }
@@ -32,23 +40,24 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     }
 
     @Override
-    public void getNotes(final TaskResultInterface<ArrayList<Note>> taskResult) {
-        /*if (isLogged()) {
+    public void getNotes(Filter filter, final TaskResultInterface<ArrayList<Note>> taskResult) {
+        if (isLogged()) {
             EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-            noteStoreClient.listNotebooksAsync(new EvernoteCallback<List<Notebook>>() {
+            NoteFilter noteFilter = castFilterToEvernoteFilter(filter);
+            noteStoreClient.findNotesAsync(noteFilter, 0, MAX_NOTES, new EvernoteCallback<NoteList>() {
                 @Override
-                public void onSuccess(List<Notebook> result) {
-                    taskResult.onSucces(result);
+                public void onSuccess(NoteList result) {
+                    taskResult.onSucces((ArrayList<Note>) result.getNotes());
                 }
 
                 @Override
                 public void onException(Exception exception) {
-                    taskResult.onError(generateError("Error retrieving notebooks"));
+                    taskResult.onError(generateError(exception.getMessage()));
                 }
             });
         } else {
             taskResult.onError(generateError(notLoggedError));
-        }*/
+        }
     }
 
     @Override
@@ -63,7 +72,7 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
 
                 @Override
                 public void onException(Exception exception) {
-                    taskResult.onError(generateError("Error retrieving notebooks"));
+                    taskResult.onError(generateError(exception.getMessage()));
                 }
             });
         } else {
@@ -79,5 +88,22 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     @Override
     public void createNote(TaskResultInterface<Note> taskResult) {
 
+    }
+
+    private NoteFilter castFilterToEvernoteFilter(Filter filter) {
+        NoteFilter noteFilter = new NoteFilter();
+        if (filter.getFilterParams() == FilterParameters.CREATION) {
+            noteFilter.setOrder(NoteSortOrder.CREATED.getValue());
+        } else if (filter.getFilterParams() == FilterParameters.TITLE) {
+            noteFilter.setOrder(NoteSortOrder.TITLE.getValue());
+        }
+
+        if (filter.getFilterOrder() == FilterOrder.ASCENDING) {
+            noteFilter.setAscending(true);
+        } else if (filter.getFilterOrder() == FilterOrder.DESCENDING) {
+            noteFilter.setAscending(false);
+        }
+
+        return noteFilter;
     }
 }

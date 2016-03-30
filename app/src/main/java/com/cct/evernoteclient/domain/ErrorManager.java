@@ -1,4 +1,4 @@
-package com.cct.evernoteclient.domain;
+package com.cct.evernoteclient.Domain;
 
 /**
  * Created by carloscarrasco on 30/3/16.

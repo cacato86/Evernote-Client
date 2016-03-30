@@ -12,15 +12,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.cct.evernoteclient.domain.ErrorManager;
-import com.cct.evernoteclient.domain.TaskRepositoryFactory;
-import com.cct.evernoteclient.domain.TaskResultInterface;
-import com.evernote.edam.type.Notebook;
+import com.cct.evernoteclient.Domain.ErrorManager;
+import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
+import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Models.Filter;
+import com.evernote.edam.type.Note;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String TAG = "TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +41,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        new TaskRepositoryFactory().getRepository().getNoteBooks(new TaskResultInterface<ArrayList<Notebook>>() {
+        getNotes();
+    }
+
+    private void getNotes() {
+        Filter filter = new Filter.FilterBuilder()
+                .setParameters(Filter.FilterBuilder.FilterParameters.TITLE)
+                .setOrder(Filter.FilterBuilder.FilterOrder.DESCENDING)
+                .createFilter();
+        new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
-            public void onSucces(ArrayList<Notebook> result) {
-                Log.e("GIVE MORE", result.size() + " / " + result.get(0).getName());
+            public void onSucces(ArrayList<Note> result) {
+                Log.e("GIVE NOTES", result.size() + " / " + result.get(0).getTitle());
             }
 
             @Override
             public void onError(ErrorManager error) {
-
+                Log.d(TAG, "onError1: " + error.getReason());
             }
         });
     }
