@@ -2,20 +2,22 @@ package com.cct.evernoteclient;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.evernote.client.android.EvernoteSession;
+import com.cct.evernoteclient.domain.ErrorManager;
+import com.cct.evernoteclient.domain.TaskRepositoryFactory;
+import com.cct.evernoteclient.domain.TaskResultInterface;
+import com.evernote.edam.type.Notebook;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +37,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        new TaskRepositoryFactory().getRepository().getNoteBooks(new TaskResultInterface<ArrayList<Notebook>>() {
+            @Override
+            public void onSucces(ArrayList<Notebook> result) {
+                Log.e("GIVE MORE", result.size() + " / " + result.get(0).getName());
+            }
+
+            @Override
+            public void onError(ErrorManager error) {
+
+            }
+        });
     }
 
     @Override
@@ -75,17 +89,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_order_title) {
             startActivity(new Intent(MainActivity.this, Login.class));
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_order_time) {
 
         }
 
