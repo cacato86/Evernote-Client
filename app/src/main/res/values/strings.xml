@@ -10,4 +10,6 @@
     <string name="should_register">You should register in Evernote for use this app</string>
     <string name="retry">Retry</string>
     <string name="exit">Exit</string>
+    <string name="no_elements">No elements</string>
+
 </resources>

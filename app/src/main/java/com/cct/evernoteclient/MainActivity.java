@@ -4,18 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Filter;
+import com.cct.evernoteclient.View.Adapters.NoteAdapter;
 import com.evernote.edam.type.Note;
 
 import java.util.ArrayList;
@@ -24,6 +30,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String TAG = "TAG";
+    private ContentLoadingProgressBar progresBar;
+    private RecyclerView recycleview;
+    private TextView emptyview;
+    private NoteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        recycleview = (RecyclerView) findViewById(R.id.recycler_view);
+        recycleview.setLayoutManager(new LinearLayoutManager(this));
+        recycleview.setHasFixedSize(true);
+        adapter = new NoteAdapter(MainActivity.this);
+        recycleview.setAdapter(adapter);
+
+        progresBar = (ContentLoadingProgressBar) findViewById(R.id.pb);
+        emptyview = (TextView) findViewById(R.id.empty_view);
+
         getNotes();
     }
 
@@ -49,9 +68,13 @@ public class MainActivity extends AppCompatActivity
                 .setParameters(Filter.FilterBuilder.FilterParameters.TITLE)
                 .setOrder(Filter.FilterBuilder.FilterOrder.DESCENDING)
                 .createFilter();
+
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
+                progresBar.setVisibility(View.GONE);
+                adapter.setNoteArray(result);
+
                 Log.e("GIVE NOTES", result.size() + " / " + result.get(0).getTitle());
             }
 
