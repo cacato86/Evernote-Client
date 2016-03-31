@@ -11,5 +11,8 @@
     <string name="retry">Retry</string>
     <string name="exit">Exit</string>
     <string name="no_elements">No elements</string>
+    <string name="create_note">Create Note</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
 
 </resources>

@@ -1,11 +1,14 @@
 package com.cct.evernoteclient.View.ViewModel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
@@ -32,21 +35,35 @@ public class NoteViewModel extends BaseObservable {
     }
 
     public void onItemClick(final View view) {
-        new NoteRepresentationFactory().getNoteRepresentation().getNoteDataForRepresentation(note, new TaskResultInterface<String>() {
+        final Context context = view.getContext();
+        new TaskRepositoryFactory().getRepository().getNoteDetail(note, new TaskResultInterface<Note>() {
             @Override
-            public void onSucces(String result) {
-                Intent intent = new Intent(view.getContext(), NoteDetailHtml.class);
-                intent.putExtra("note_html", result);
-                intent.putExtra("title", note.getTitle());
-                view.getContext().startActivity(intent);
+            public void onSucces(Note result) {
+                launchNote(context, result);
             }
 
             @Override
             public void onError(ErrorManager error) {
-
+                Toast.makeText(context, error.getReason(), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    private void launchNote(final Context context, final Note note) {
+        new NoteRepresentationFactory().getNoteRepresentation().getNoteDataForRepresentation(note, new TaskResultInterface<String>() {
+            @Override
+            public void onSucces(String result) {
+                Intent intent = new Intent(context, NoteDetailHtml.class);
+                intent.putExtra("note_html", result);
+                intent.putExtra("title", note.getTitle());
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onError(ErrorManager error) {
+                Toast.makeText(context, error.getReason(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public String getTitle() {
@@ -54,20 +71,23 @@ public class NoteViewModel extends BaseObservable {
     }
 
     public String getAuthor() {
-        String author = (note.getAttributes().getAuthor().equals("") ? "Unknown" : note.getAttributes().getAuthor());
+        String author = (note.getAttributes() != null && note.getAttributes().getAuthor() != null) ? note.getAttributes().getAuthor() : "Unknown";
         return author;
     }
 
     public String getUpdate() {
         long timeStampServer = note.getUpdated();
-        long timeStampNow = new Date().getTime();
+        if (timeStampServer > 0) {
+            long timeStampNow = new Date().getTime();
 
-        CharSequence realTime = DateUtils.getRelativeTimeSpanString(
-                timeStampServer,
-                timeStampNow,
-                DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL);
+            CharSequence realTime = DateUtils.getRelativeTimeSpanString(
+                    timeStampServer,
+                    timeStampNow,
+                    DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL);
 
-        return realTime.toString();
+            return realTime.toString();
+        }
+        return "";
     }
 
     public Note getNote() {

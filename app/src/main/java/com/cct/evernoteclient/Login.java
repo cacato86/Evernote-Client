@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
+import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.login.EvernoteLoginFragment;
 
@@ -21,6 +22,7 @@ public class Login extends FragmentActivity implements EvernoteLoginFragment.Res
 
     private void authenticateInEvernote() {
         EvernoteSession.getInstance().authenticate(this);
+        //new TaskRepositoryFactory().getRepository().login(this);
     }
 
     @Override

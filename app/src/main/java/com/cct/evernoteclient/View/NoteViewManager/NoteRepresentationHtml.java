@@ -34,7 +34,7 @@ public class NoteRepresentationHtml implements NoteRepresentationInterface {
 
                 @Override
                 public void onException(Exception exception) {
-                    callbackResult.onError(Utils.generateError(exception.getMessage()));
+                    callbackResult.onError(Utils.generateError(exception.toString()));
                 }
             });
         } catch (IOException e) {

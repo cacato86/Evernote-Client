@@ -1,5 +1,8 @@
 package com.cct.evernoteclient.Domain;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.cct.evernoteclient.Models.Filter;
 import com.cct.evernoteclient.Models.Filter.FilterBuilder.FilterOrder;
 import com.cct.evernoteclient.Models.Filter.FilterBuilder.FilterParameters;
@@ -30,8 +33,8 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     }
 
     @Override
-    public void login(TaskResultInterface<Boolean> taskResult) {
-
+    public void login(Activity activity) {
+        EvernoteSession.getInstance().authenticate(activity);
     }
 
     @Override
@@ -47,7 +50,7 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
 
                 @Override
                 public void onException(Exception exception) {
-                    taskResult.onError(Utils.generateError(exception.getMessage()));
+                    taskResult.onError(Utils.generateError(exception.toString()));
                 }
             });
         } else {
@@ -67,7 +70,7 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
 
                 @Override
                 public void onException(Exception exception) {
-                    taskResult.onError(Utils.generateError(exception.getMessage()));
+                    taskResult.onError(Utils.generateError(exception.toString()));
                 }
             });
         } else {
@@ -76,8 +79,23 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     }
 
     @Override
-    public void getNoteDetail(TaskResultInterface<Note> taskResult) {
+    public void getNoteDetail(Note note, final TaskResultInterface<Note> taskResult) {
+        if (isLogged()) {
+            EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
+            noteStoreClient.getNoteAsync(note.getGuid(), true, true, true, true, new EvernoteCallback<Note>() {
+                @Override
+                public void onSuccess(Note result) {
+                    taskResult.onSucces(result);
+                }
 
+                @Override
+                public void onException(Exception exception) {
+                    taskResult.onError(Utils.generateError(exception.toString()));
+                }
+            });
+        } else {
+            taskResult.onError(Utils.generateError(notLoggedError));
+        }
     }
 
     @Override
@@ -87,13 +105,13 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
             noteStoreClient.createNoteAsync(note, new EvernoteCallback<Note>() {
                 @Override
                 public void onSuccess(Note result) {
+                    Log.e("NOTECREATED0",result.toString());
                     taskResult.onSucces(result);
                 }
 
                 @Override
                 public void onException(Exception exception) {
-                    exception.printStackTrace();
-                    taskResult.onError(Utils.generateError(exception.getMessage()));
+                    taskResult.onError(Utils.generateError(exception.toString()));
                 }
             });
         } else {
