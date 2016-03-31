@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,18 +12,63 @@
         android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dip">
+        android:layout_margin="15dip"
+        android:onClick="@{viewModel.onItemClick}">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:padding="10dip">
 
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dip"
+                app:loadBitmap="@{viewModel.getNote}" />
+
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_toLeftOf="@+id/img"
                 android:text="@{viewModel.getTitle}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginBottom="10dip"
+                android:layout_toLeftOf="@+id/img"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.getUpdate}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" by "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dip"
+                    android:text="@{viewModel.getAuthor}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+
+            </LinearLayout>
+
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

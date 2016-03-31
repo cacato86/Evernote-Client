@@ -42,7 +42,6 @@ public class NoteAdapter extends RecycleViewAnimate {
 
     @Override
     public int getItemCount() {
-        Log.e("TAMA",notesArray.size()+" /");
         return notesArray.size();
     }
 
@@ -55,7 +54,6 @@ public class NoteAdapter extends RecycleViewAnimate {
         }
 
         void bindCharacter(Note note) {
-            Log.e("BINd titl",note.getTitle()+" /");
             if (binding.getViewModel() == null) {
                 binding.setViewModel(new NoteViewModel(note));
             } else {
