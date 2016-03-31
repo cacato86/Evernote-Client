@@ -12,9 +12,7 @@ import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
-import com.squareup.okhttp.Response;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,23 +55,6 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
         }
     }
 
-    private void getCompletedNotes(EvernoteNoteStoreClient noteStoreClient, ArrayList<Note> notes, TaskResultInterface callback) {
-        ArrayList<Note> newArrayNotes = new ArrayList<>();
-        for (int i = 0; i < notes.size(); i++) {
-            noteStoreClient.getNoteAsync(notes.get(i).getGuid(), true, true, true, true, new EvernoteCallback<Note>() {
-                @Override
-                public void onSuccess(Note result) {
-
-                }
-
-                @Override
-                public void onException(Exception exception) {
-
-                }
-            });
-        }
-    }
-
     @Override
     public void getNoteBooks(final TaskResultInterface<ArrayList<Notebook>> taskResult) {
         if (isLogged()) {
@@ -100,7 +81,24 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     }
 
     @Override
-    public void createNote(TaskResultInterface<Note> taskResult) {
+    public void createNote(Note note, final TaskResultInterface<Note> taskResult) {
+        if (isLogged()) {
+            EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
+            noteStoreClient.createNoteAsync(note, new EvernoteCallback<Note>() {
+                @Override
+                public void onSuccess(Note result) {
+                    taskResult.onSucces(result);
+                }
+
+                @Override
+                public void onException(Exception exception) {
+                    exception.printStackTrace();
+                    taskResult.onError(Utils.generateError(exception.getMessage()));
+                }
+            });
+        } else {
+            taskResult.onError(Utils.generateError(notLoggedError));
+        }
 
     }
 

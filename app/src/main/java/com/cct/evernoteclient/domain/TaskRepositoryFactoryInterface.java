@@ -18,5 +18,5 @@ public interface TaskRepositoryFactoryInterface {
 
     void getNoteDetail(TaskResultInterface<Note> taskResult);
 
-    void createNote(TaskResultInterface<Note> taskResult);
+    void createNote(Note note, TaskResultInterface<Note> taskResult);
 }

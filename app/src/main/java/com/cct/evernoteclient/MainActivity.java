@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recycleview;
     private TextView emptyview;
     private NoteAdapter adapter;
+    private ArrayList<Note> arrayNotes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
+                Log.e("VAMOS","SI");
+                arrayNotes = result;
                 progresBar.setVisibility(View.GONE);
                 adapter.setNoteArray(result);
 
@@ -118,7 +121,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.add) {
+            Note note = new Note();
+            note.setTitle("Hola");
+            new TaskRepositoryFactory().getRepository().createNote(note, new TaskResultInterface<Note>() {
+                @Override
+                public void onSucces(Note result) {
+                    arrayNotes.add(result);
+                    adapter.setNoteArray(arrayNotes);
+                }
+
+                @Override
+                public void onError(ErrorManager error) {
+
+                }
+            });
             return true;
         }
 
