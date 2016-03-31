@@ -22,8 +22,10 @@ import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Filter;
 import com.cct.evernoteclient.View.Adapters.NoteAdapter;
 import com.evernote.edam.type.Note;
+import com.evernote.edam.type.Resource;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity
                 progresBar.setVisibility(View.GONE);
                 adapter.setNoteArray(result);
 
-                Log.e("GIVE NOTES", result.size() + " / " + result.get(0).getTitle());
+                //Log.e("GIVE NOTES", note.getTitle() + " / " + " / " + note.getAttributes().toString()
+                  //      + " / " + note.getContent() + " / " + note.getUpdated() + " / " + note.getResources().size() + " /" + note.getGuid() + " / " + note.getContentLength());
             }
 
             @Override
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity
     private Filter createFilterByCreation() {
         Filter filter = new Filter.FilterBuilder()
                 .setParameters(Filter.FilterBuilder.FilterParameters.CREATION)
-                .setOrder(Filter.FilterBuilder.FilterOrder.ASCENDING)
+                .setOrder(Filter.FilterBuilder.FilterOrder.DESCENDING)
                 .createFilter();
         return filter;
     }
