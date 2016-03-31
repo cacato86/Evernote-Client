@@ -1,6 +1,5 @@
 package com.cct.evernoteclient;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -60,15 +59,11 @@ public class MainActivity extends AppCompatActivity
         progresBar = (ContentLoadingProgressBar) findViewById(R.id.pb);
         emptyview = (TextView) findViewById(R.id.empty_view);
 
-        getNotes();
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
-    private void getNotes() {
-        Filter filter = new Filter.FilterBuilder()
-                .setParameters(Filter.FilterBuilder.FilterParameters.TITLE)
-                .setOrder(Filter.FilterBuilder.FilterOrder.DESCENDING)
-                .createFilter();
-
+    private void getNotes(Filter filter) {
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
@@ -85,6 +80,22 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private Filter createFilterByTitle() {
+        Filter filter = new Filter.FilterBuilder()
+                .setParameters(Filter.FilterBuilder.FilterParameters.TITLE)
+                .setOrder(Filter.FilterBuilder.FilterOrder.ASCENDING)
+                .createFilter();
+        return filter;
+    }
+
+    private Filter createFilterByCreation() {
+        Filter filter = new Filter.FilterBuilder()
+                .setParameters(Filter.FilterBuilder.FilterParameters.CREATION)
+                .setOrder(Filter.FilterBuilder.FilterOrder.ASCENDING)
+                .createFilter();
+        return filter;
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -97,19 +108,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -120,13 +125,11 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_order_title) {
-            startActivity(new Intent(MainActivity.this, Login.class));
+            getNotes(createFilterByTitle());
         } else if (id == R.id.nav_order_time) {
-
+            getNotes(createFilterByCreation());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
