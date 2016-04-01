@@ -17,7 +17,7 @@ public class NoteCreatorFactory {
 
     public NoteCreatorInterface getNoteCreator(TypeCreators type) {
         if (type == TypeCreators.OCR) {
-            return new NoteCreatorOCR();
+            return new NoteCreatorOCR(activity);
         }
         return new NoteCreatorKeyboard(activity);
     }
