@@ -66,7 +66,7 @@ public class NoteCreatorKeyboard implements NoteCreatorInterface {
         new TaskRepositoryFactory().getRepository().createNote(note, new TaskResultInterface<Note>() {
             @Override
             public void onSucces(Note result) {
-                callback.onSucces(note);
+                callback.onSucces(result);
             }
 
             @Override

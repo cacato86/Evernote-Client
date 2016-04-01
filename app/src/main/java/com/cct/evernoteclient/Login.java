@@ -1,19 +1,18 @@
 package com.cct.evernoteclient;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.evernote.client.android.EvernoteSession;
-import com.evernote.client.android.login.EvernoteLoginFragment;
 
 /**
  * Created by carloscarrasco on 30/3/16.
  */
-public class Login extends FragmentActivity implements EvernoteLoginFragment.ResultCallback, DialogInterface.OnClickListener {
+public class Login extends Activity implements DialogInterface.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,17 +20,24 @@ public class Login extends FragmentActivity implements EvernoteLoginFragment.Res
     }
 
     private void authenticateInEvernote() {
-        EvernoteSession.getInstance().authenticate(this);
-        //new TaskRepositoryFactory().getRepository().login(this);
+        new TaskRepositoryFactory().getRepository().login(this);
     }
 
     @Override
-    public void onLoginFinished(boolean successful) {
-        if (successful) {
-            startActivity(new Intent(Login.this, MainActivity.class));
-            finish();
-        } else {
-            createAdvisorDialog().show();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case EvernoteSession.REQUEST_CODE_LOGIN:
+                if (resultCode == Activity.RESULT_OK) {
+                    startActivity(new Intent(Login.this, MainActivity.class));
+                    finish();
+                } else {
+                    createAdvisorDialog().show();
+                }
+                break;
+
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
         }
     }
 

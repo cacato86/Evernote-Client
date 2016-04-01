@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity
         new NoteCreatorFactory(MainActivity.this).getNoteCreator(type).createNote(new TaskResultInterface<Note>() {
             @Override
             public void onSucces(Note result) {
-                Log.e("NOTECREATED",result.toString());
                 recycleview.scrollToPosition(0);
                 arrayNotes.add(0, result);
                 adapter.animateTo(arrayNotes);

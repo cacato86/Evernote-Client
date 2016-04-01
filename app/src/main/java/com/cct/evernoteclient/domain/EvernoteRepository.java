@@ -45,6 +45,7 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
             noteStoreClient.findNotesAsync(noteFilter, 0, MAX_NOTES, new EvernoteCallback<NoteList>() {
                 @Override
                 public void onSuccess(NoteList result) {
+                    Log.e("getNotes0",result.toString());
                     taskResult.onSucces((ArrayList<Note>) result.getNotes());
                 }
 

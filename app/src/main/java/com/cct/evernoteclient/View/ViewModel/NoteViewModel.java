@@ -36,20 +36,6 @@ public class NoteViewModel extends BaseObservable {
 
     public void onItemClick(final View view) {
         final Context context = view.getContext();
-        new TaskRepositoryFactory().getRepository().getNoteDetail(note, new TaskResultInterface<Note>() {
-            @Override
-            public void onSucces(Note result) {
-                launchNote(context, result);
-            }
-
-            @Override
-            public void onError(ErrorManager error) {
-                Toast.makeText(context, error.getReason(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void launchNote(final Context context, final Note note) {
         new NoteRepresentationFactory().getNoteRepresentation().getNoteDataForRepresentation(note, new TaskResultInterface<String>() {
             @Override
             public void onSucces(String result) {
