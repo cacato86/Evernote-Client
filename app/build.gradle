@@ -33,6 +33,5 @@ dependencies {
     compile 'com.evernote:android-sdk:2.0.0-RC3'
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
-    compile 'net.sourceforge.tess4j:tess4j:3.1.0'
-    compile 'com.googlecode.jinahya:ocap-api:1.2'
+    compile 'com.rmtheis:tess-two:5.4.1'
 }

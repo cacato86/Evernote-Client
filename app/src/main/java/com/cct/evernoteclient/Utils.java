@@ -4,8 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.os.Environment;
+import android.util.Log;
+import android.view.View;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,5 +74,33 @@ public class Utils {
         return null;
     }
 
+    public static String detectText(Bitmap bitmap) {
+        Log.e("TAM1",bitmap.getHeight()+" /");
 
+        TessBaseAPI.ProgressNotifier progres = new TessBaseAPI.ProgressNotifier() {
+            @Override
+            public void onProgressValues(TessBaseAPI.ProgressValues progressValues) {
+                Log.e("PROGRE",progressValues.getPercent()+" /");
+            }
+        };
+        TessBaseAPI baseApi = new TessBaseAPI(progres);
+        baseApi.setDebug(true);
+        baseApi.init(Environment.getExternalStorageDirectory()+"/", "eng");
+
+        //baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_CHAR);
+        baseApi.setImage(bitmap);
+        String recognizedText = baseApi.getUTF8Text();
+        Log.e("Texto leido", "texto: "+recognizedText);
+        baseApi.end();
+        return recognizedText;
+    }
+
+    public static Bitmap loadBitmapFromView(View v) {
+        Bitmap b = Bitmap.createBitmap( v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        c.drawColor(Color.WHITE);
+        v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+        v.draw(c);
+        return b;
+    }
 }

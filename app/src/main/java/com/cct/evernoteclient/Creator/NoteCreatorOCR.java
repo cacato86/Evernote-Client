@@ -1,15 +1,16 @@
 package com.cct.evernoteclient.Creator;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 
 import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
+import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.Utils;
-
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,22 +28,12 @@ public class NoteCreatorOCR implements NoteCreatorInterface {
 
     @Override
     public void createNote(TaskResultInterface<Note> callback) {
-        File imageFile = null;
-        try {
-            imageFile = Utils.getFile(activity);
-            Log.e("IMAGE", imageFile.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //File imageFile = new File("eurotext.tif");
-        ITesseract instance = new Tesseract();  // JNA Interface Mapping
-        // ITesseract instance = new Tesseract1(); // JNA Direct Mapping
-
-        try {
-            String result = instance.doOCR(imageFile);
-            Log.e("RESULT", result);
-        } catch (TesseractException e) {
-            e.printStackTrace();
-        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        options.inDither = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap icon = BitmapFactory.decodeResource(activity.getResources(), R.drawable.c, options);
+        String letter = Utils.detectText(icon);
     }
+
 }

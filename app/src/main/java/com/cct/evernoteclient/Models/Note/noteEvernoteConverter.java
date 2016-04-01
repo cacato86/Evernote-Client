@@ -1,7 +1,6 @@
 package com.cct.evernoteclient.Models.Note;
 
 import com.evernote.edam.type.NoteAttributes;
-
 /**
  * Created by carloscarrasco on 1/4/16.
  */

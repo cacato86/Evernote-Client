@@ -1,6 +1,7 @@
 package com.cct.evernoteclient;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -127,7 +128,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.add) {
-            createNoteDialog();
+            startActivity(new Intent(MainActivity.this,FingerPaintExample.class));
+            //createNoteDialog();
             return true;
         }
 
