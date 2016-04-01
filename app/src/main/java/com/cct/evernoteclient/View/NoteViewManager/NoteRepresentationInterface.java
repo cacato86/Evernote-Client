@@ -1,7 +1,7 @@
 package com.cct.evernoteclient.View.NoteViewManager;
 
 import com.cct.evernoteclient.Domain.TaskResultInterface;
-import com.evernote.edam.type.Note;
+import com.cct.evernoteclient.Models.Note.Note;
 
 /**
  * Created by carloscarrasco on 31/3/16.

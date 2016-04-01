@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.View.NoteDetailHtml;
 import com.cct.evernoteclient.View.NoteViewManager.NoteRepresentationFactory;
-import com.evernote.edam.type.Note;
 
 import java.util.Date;
 
@@ -57,12 +57,12 @@ public class NoteViewModel extends BaseObservable {
     }
 
     public String getAuthor() {
-        String author = (note.getAttributes() != null && note.getAttributes().getAuthor() != null) ? note.getAttributes().getAuthor() : "Unknown";
+        String author = ( note.getAuthor() != null) ? note.getAuthor() : "Unknown";
         return author;
     }
 
     public String getUpdate() {
-        long timeStampServer = note.getUpdated();
+        long timeStampServer = note.getUpdate();
         if (timeStampServer > 0) {
             long timeStampNow = new Date().getTime();
 

@@ -10,11 +10,10 @@ import android.widget.EditText;
 import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.Utils;
 import com.evernote.client.android.EvernoteUtil;
-import com.evernote.edam.type.Note;
-import com.evernote.edam.type.NoteAttributes;
 
 import java.util.Date;
 
@@ -60,9 +59,9 @@ public class NoteCreatorKeyboard implements NoteCreatorInterface {
         final Note note = new Note();
         note.setTitle(title);
         note.setContent(EvernoteUtil.NOTE_PREFIX + content + EvernoteUtil.NOTE_SUFFIX);
-        note.setUpdated(actualTimeStamp);
+        note.setUpdate(actualTimeStamp);
         note.setCreated(actualTimeStamp);
-        NoteAttributes attributes = new NoteAttributes();
+        note.setAuthor(Utils.getUserName(activity));
         new TaskRepositoryFactory().getRepository().createNote(note, new TaskResultInterface<Note>() {
             @Override
             public void onSucces(Note result) {

@@ -2,8 +2,10 @@ package com.cct.evernoteclient.View;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,6 +29,8 @@ public class NoteDetailHtml extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final ContentLoadingProgressBar progresBar = (ContentLoadingProgressBar) findViewById(R.id.pb);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -55,6 +59,12 @@ public class NoteDetailHtml extends AppCompatActivity {
                 }
 
                 return super.shouldInterceptRequest(view, url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progresBar.setVisibility(View.GONE);
             }
         });
 

@@ -6,8 +6,8 @@ package com.cct.evernoteclient.View.CustomView;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.View.Adapters.NoteAdapter;
-import com.evernote.edam.type.Note;
 
 import java.util.ArrayList;
 

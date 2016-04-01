@@ -6,18 +6,20 @@ import android.util.Log;
 import com.cct.evernoteclient.Models.Filter;
 import com.cct.evernoteclient.Models.Filter.FilterBuilder.FilterOrder;
 import com.cct.evernoteclient.Models.Filter.FilterBuilder.FilterParameters;
+import com.cct.evernoteclient.Models.Note.Note;
+import com.cct.evernoteclient.Models.Note.NoteManager;
+import com.cct.evernoteclient.Models.User.User;
+import com.cct.evernoteclient.Models.User.UserManager;
 import com.cct.evernoteclient.Utils;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.asyncclient.EvernoteCallback;
 import com.evernote.client.android.asyncclient.EvernoteNoteStoreClient;
+import com.evernote.client.android.asyncclient.EvernoteUserStoreClient;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
-import com.evernote.edam.type.Note;
 import com.evernote.edam.type.NoteSortOrder;
-import com.evernote.edam.type.Notebook;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -45,28 +47,7 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
             noteStoreClient.findNotesAsync(noteFilter, 0, MAX_NOTES, new EvernoteCallback<NoteList>() {
                 @Override
                 public void onSuccess(NoteList result) {
-                    Log.e("getNotes0",result.toString());
-                    taskResult.onSucces((ArrayList<Note>) result.getNotes());
-                }
-
-                @Override
-                public void onException(Exception exception) {
-                    taskResult.onError(Utils.generateError(exception.toString()));
-                }
-            });
-        } else {
-            taskResult.onError(Utils.generateError(notLoggedError));
-        }
-    }
-
-    @Override
-    public void getNoteBooks(final TaskResultInterface<ArrayList<Notebook>> taskResult) {
-        if (isLogged()) {
-            EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-            noteStoreClient.listNotebooksAsync(new EvernoteCallback<List<Notebook>>() {
-                @Override
-                public void onSuccess(List<Notebook> result) {
-                    taskResult.onSucces((ArrayList<Notebook>) result);
+                    taskResult.onSucces(convertEvernoteArray(result));
                 }
 
                 @Override
@@ -83,10 +64,11 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     public void getNoteDetail(Note note, final TaskResultInterface<Note> taskResult) {
         if (isLogged()) {
             EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-            noteStoreClient.getNoteAsync(note.getGuid(), true, true, true, true, new EvernoteCallback<Note>() {
+            noteStoreClient.getNoteAsync(note.getId(), true, true, true, true, new EvernoteCallback<com.evernote.edam.type.Note>() {
                 @Override
-                public void onSuccess(Note result) {
-                    taskResult.onSucces(result);
+                public void onSuccess(com.evernote.edam.type.Note result) {
+                    Note note = new NoteManager<com.evernote.edam.type.Note>().convertEspecificNoteToMyNote(result);
+                    taskResult.onSucces(note);
                 }
 
                 @Override
@@ -102,12 +84,13 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     @Override
     public void createNote(Note note, final TaskResultInterface<Note> taskResult) {
         if (isLogged()) {
+            com.evernote.edam.type.Note noteEvernote = new NoteManager<com.evernote.edam.type.Note>().convertMyNoteToEspecificNote(note);
             EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-            noteStoreClient.createNoteAsync(note, new EvernoteCallback<Note>() {
+            noteStoreClient.createNoteAsync(noteEvernote, new EvernoteCallback<com.evernote.edam.type.Note>() {
                 @Override
-                public void onSuccess(Note result) {
-                    Log.e("NOTECREATED0",result.toString());
-                    taskResult.onSucces(result);
+                public void onSuccess(com.evernote.edam.type.Note result) {
+                    Note note = new NoteManager<com.evernote.edam.type.Note>().convertEspecificNoteToMyNote(result);
+                    taskResult.onSucces(note);
                 }
 
                 @Override
@@ -119,6 +102,37 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
             taskResult.onError(Utils.generateError(notLoggedError));
         }
 
+    }
+
+    @Override
+    public void getUser(final TaskResultInterface<User> taskResult) {
+        if (isLogged()) {
+            EvernoteUserStoreClient userStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getUserStoreClient();
+            userStoreClient.getUserAsync(new EvernoteCallback<com.evernote.edam.type.User>() {
+                @Override
+                public void onSuccess(com.evernote.edam.type.User result) {
+                    User user = new UserManager<com.evernote.edam.type.User>().getUser(result);
+                    taskResult.onSucces(user);
+                }
+
+                @Override
+                public void onException(Exception exception) {
+                    taskResult.onError(Utils.generateError(exception.toString()));
+                }
+            });
+        } else {
+            taskResult.onError(Utils.generateError(notLoggedError));
+        }
+    }
+
+    private ArrayList<Note> convertEvernoteArray(NoteList list) {
+        ArrayList<Note> notes = new ArrayList<>();
+        for (int i = 0; i < list.getNotes().size(); i++) {
+            com.evernote.edam.type.Note noteEvernote = list.getNotes().get(i);
+            Note note = new NoteManager<com.evernote.edam.type.Note>().convertEspecificNoteToMyNote(noteEvernote);
+            notes.add(note);
+        }
+        return notes;
     }
 
     private NoteFilter castFilterToEvernoteFilter(Filter filter) {

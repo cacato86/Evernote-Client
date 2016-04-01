@@ -7,11 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.View.CustomView.RecycleViewAnimate;
 import com.cct.evernoteclient.View.ViewModel.NoteViewModel;
 import com.cct.evernoteclient.databinding.NoteBinding;
-import com.evernote.edam.type.Note;
 
 /**
  * Created by Carlos Carrasco Torres on 31/03/2016.

@@ -1,10 +1,10 @@
 package com.cct.evernoteclient.View.NoteViewManager;
 
 import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.Utils;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.asyncclient.EvernoteCallback;
-import com.evernote.edam.type.Note;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class NoteRepresentationHtml implements NoteRepresentationInterface {
     @Override
     public void getNoteDataForRepresentation(Note note, final TaskResultInterface callbackResult) {
         try {
-            EvernoteSession.getInstance().getEvernoteClientFactory().getHtmlHelperDefault().downloadNoteAsync(note.getGuid(), new EvernoteCallback<Response>() {
+            EvernoteSession.getInstance().getEvernoteClientFactory().getHtmlHelperDefault().downloadNoteAsync(note.getId(), new EvernoteCallback<Response>() {
                 @Override
                 public void onSuccess(final Response result) {
                     new Thread(new Runnable() {

@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +23,9 @@ import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Filter;
+import com.cct.evernoteclient.Models.Note.Note;
+import com.cct.evernoteclient.Models.User.User;
 import com.cct.evernoteclient.View.Adapters.NoteAdapter;
-import com.evernote.edam.type.Note;
 
 import java.util.ArrayList;
 
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        fillHeaderNavigationView(navigationView);
 
         recycleview = (RecyclerView) findViewById(R.id.recycler_view);
         recycleview.setLayoutManager(new LinearLayoutManager(this));
@@ -69,7 +70,28 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
+    private void fillHeaderNavigationView(NavigationView navigationView) {
+        View view = navigationView.getHeaderView(0);
+        final TextView name = (TextView) view.findViewById(R.id.name);
+        final TextView username = (TextView) view.findViewById(R.id.username);
+
+        new TaskRepositoryFactory().getRepository().getUser(new TaskResultInterface<User>() {
+            @Override
+            public void onSucces(User result) {
+                Utils.saveUserName(MainActivity.this, result.getUsername());
+                name.setText(result.getName());
+                username.setText(result.getUsername());
+            }
+
+            @Override
+            public void onError(ErrorManager error) {
+                Toast.makeText(MainActivity.this, error.getReason(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void getNotes(Filter filter) {
+        progresBar.setVisibility(View.VISIBLE);
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
@@ -131,12 +153,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createNote(NoteCreatorFactory.TypeCreators type) {
+        progresBar.setVisibility(View.VISIBLE);
         new NoteCreatorFactory(MainActivity.this).getNoteCreator(type).createNote(new TaskResultInterface<Note>() {
             @Override
             public void onSucces(Note result) {
                 recycleview.scrollToPosition(0);
                 arrayNotes.add(0, result);
                 adapter.animateTo(arrayNotes);
+                progresBar.setVisibility(View.GONE);
             }
 
             @Override

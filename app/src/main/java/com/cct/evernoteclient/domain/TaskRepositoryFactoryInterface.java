@@ -3,8 +3,8 @@ package com.cct.evernoteclient.Domain;
 import android.app.Activity;
 
 import com.cct.evernoteclient.Models.Filter;
-import com.evernote.edam.type.Note;
-import com.evernote.edam.type.Notebook;
+import com.cct.evernoteclient.Models.Note.Note;
+import com.cct.evernoteclient.Models.User.User;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ public interface TaskRepositoryFactoryInterface {
 
     void getNotes(Filter filter, TaskResultInterface<ArrayList<Note>> taskResult);
 
-    void getNoteBooks(TaskResultInterface<ArrayList<Notebook>> taskResult);
-
     void getNoteDetail(Note note, TaskResultInterface<Note> taskResult);
 
     void createNote(Note note, TaskResultInterface<Note> taskResult);
+
+    void getUser(TaskResultInterface<User> taskResult);
 }
