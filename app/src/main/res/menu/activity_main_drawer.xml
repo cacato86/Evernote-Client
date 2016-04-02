@@ -12,4 +12,12 @@
             android:title="Order by date" />
     </group>
 
+    <item android:title="Logout">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@android:drawable/ic_menu_revert"
+                android:title="Close session" />
+        </menu>
+    </item>
 </menu>

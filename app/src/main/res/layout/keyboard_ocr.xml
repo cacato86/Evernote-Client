@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.cct.evernoteclient.View.CustomView.FingerPaintView
+        android:id="@+id/fingerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/del"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_margin="10dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@android:drawable/ic_menu_delete" />
+
+</RelativeLayout>

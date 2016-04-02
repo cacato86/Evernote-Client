@@ -40,6 +40,11 @@ public class EvernoteRepository implements TaskRepositoryFactoryInterface {
     }
 
     @Override
+    public void logout() {
+        EvernoteSession.getInstance().logOut();
+    }
+
+    @Override
     public void getNotes(Filter filter, final TaskResultInterface<ArrayList<Note>> taskResult) {
         if (isLogged()) {
             EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();

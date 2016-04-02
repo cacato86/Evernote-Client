@@ -1,39 +1,96 @@
 package com.cct.evernoteclient.Creator;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.cct.evernoteclient.Domain.ErrorManager;
+import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.Utils;
-import com.googlecode.tesseract.android.TessBaseAPI;
+import com.cct.evernoteclient.View.CustomView.EditTextOCR;
+import com.cct.evernoteclient.View.CustomView.RelativeOCR;
+import com.evernote.client.android.EvernoteUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by Carlos Carrasco Torres on 31/03/2016.
  */
 public class NoteCreatorOCR implements NoteCreatorInterface {
 
-    private final Activity activity;
+    private Activity activity;
+    private long actualTimeStamp = new Date().getTime();
+    private TaskResultInterface<Note> callback;
 
     public NoteCreatorOCR(Activity activity) {
         this.activity = activity;
     }
 
     @Override
-    public void createNote(TaskResultInterface<Note> callback) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        options.inDither = false;
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap icon = BitmapFactory.decodeResource(activity.getResources(), R.drawable.c, options);
-        String letter = Utils.detectText(icon);
+    public void createNote(final TaskResultInterface<Note> callback) {
+        this.callback = callback;
+        createNoteDialog();
     }
 
+    private void createNoteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.create_note_ocr_dialog, null);
+
+        RelativeOCR title = (RelativeOCR) view.findViewById(R.id.title);
+        final EditTextOCR editOCRTitle = title.getEditOCR();
+
+        RelativeOCR content = (RelativeOCR) view.findViewById(R.id.content);
+        final EditTextOCR editOCRContent = content.getEditOCR();
+
+        builder.setView(view)
+                .setPositiveButton(R.string.create_note, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editOCRTitle.getText().toString().trim().equals("") || editOCRContent.getText().toString().trim().equals("")) {
+                    Toast.makeText(activity, activity.getResources().getString(R.string.write_something), Toast.LENGTH_LONG).show();
+                } else {
+                    fillNote(editOCRTitle.getText().toString(), editOCRContent.getText().toString(), dialog);
+                }
+            }
+        });
+    }
+
+    private void fillNote(String title, String content, final AlertDialog dialog) {
+        final Note note = new Note();
+        note.setTitle(title);
+        note.setContent(EvernoteUtil.NOTE_PREFIX + content + EvernoteUtil.NOTE_SUFFIX);
+        note.setUpdate(actualTimeStamp);
+        note.setCreated(actualTimeStamp);
+        note.setAuthor(Utils.getUserName(activity));
+        new TaskRepositoryFactory().getRepository().createNote(note, new TaskResultInterface<Note>() {
+            @Override
+            public void onSucces(Note result) {
+                callback.onSucces(result);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onError(ErrorManager error) {
+                callback.onError(error);
+            }
+        });
+    }
 }

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public interface TaskRepositoryFactoryInterface {
     void login(Activity activity);
 
+    void logout();
+
     void getNotes(Filter filter, TaskResultInterface<ArrayList<Note>> taskResult);
 
     void getNoteDetail(Note note, TaskResultInterface<Note> taskResult);

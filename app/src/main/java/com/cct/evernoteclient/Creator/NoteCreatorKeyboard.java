@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
 import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
@@ -49,13 +50,25 @@ public class NoteCreatorKeyboard implements NoteCreatorInterface {
                 .setPositiveButton(R.string.create_note, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        fillNote(title.getText().toString(), content.getText().toString());
                     }
                 });
-        builder.create().show();
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (title.getText().toString().trim().equals("") || content.getText().toString().trim().equals("")) {
+                    Toast.makeText(activity, activity.getResources().getString(R.string.write_something), Toast.LENGTH_LONG).show();
+                } else {
+                    fillNote(title.getText().toString(), content.getText().toString(), dialog);
+                }
+            }
+        });
     }
 
-    private void fillNote(String title, String content) {
+    private void fillNote(String title, String content, final AlertDialog dialog) {
         final Note note = new Note();
         note.setTitle(title);
         note.setContent(EvernoteUtil.NOTE_PREFIX + content + EvernoteUtil.NOTE_SUFFIX);
@@ -66,6 +79,7 @@ public class NoteCreatorKeyboard implements NoteCreatorInterface {
             @Override
             public void onSucces(Note result) {
                 callback.onSucces(result);
+                dialog.dismiss();
             }
 
             @Override

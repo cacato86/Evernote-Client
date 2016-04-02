@@ -8,15 +8,15 @@
         android:layout_height="40dip"
         android:id="@+id/btn"/>
 
-    <EditText
-        android:id="@+id/edit"
+    <com.cct.evernoteclient.View.CustomView.RelativeOCR
+        android:id="@+id/rl_ocr"
         android:layout_below="@id/btn"
         android:layout_width="match_parent"
         android:layout_height="50dip" />
 
-    <com.cct.evernoteclient.FingerPaintView
+    <com.cct.evernoteclient.View.CustomView.FingerPaintView
         android:id="@+id/fingerView"
-        android:layout_below="@+id/edit"
+        android:layout_below="@+id/rl_ocr"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <ImageView android:id="@+id/img"

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String TAG = "TAG";
     private ContentLoadingProgressBar progresBar;
     private RecyclerView recycleview;
     private TextView emptyview;
@@ -92,13 +92,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getNotes(Filter filter) {
-        progresBar.setVisibility(View.VISIBLE);
+        progresBar.show();
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
-                arrayNotes = result;
-                progresBar.setVisibility(View.GONE);
-                adapter.setNoteArray(result);
+                Log.e("TAM",result.size()+" /");
+                if (result.size() > 0){
+                    arrayNotes = result;
+                    adapter.setNoteArray(result);
+                }else{
+                    emptyview.setVisibility(View.VISIBLE);
+                }
+                progresBar.hide();
             }
 
             @Override
@@ -128,11 +133,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.add) {
-            startActivity(new Intent(MainActivity.this,FingerPaintExample.class));
-            //createNoteDialog();
+            createNoteDialog();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,14 +158,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createNote(NoteCreatorFactory.TypeCreators type) {
-        progresBar.setVisibility(View.VISIBLE);
         new NoteCreatorFactory(MainActivity.this).getNoteCreator(type).createNote(new TaskResultInterface<Note>() {
             @Override
             public void onSucces(Note result) {
                 recycleview.scrollToPosition(0);
                 arrayNotes.add(0, result);
                 adapter.animateTo(arrayNotes);
-                progresBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -180,6 +181,10 @@ public class MainActivity extends AppCompatActivity
             getNotes(createFilterByTitle());
         } else if (id == R.id.nav_order_time) {
             getNotes(createFilterByCreation());
+        } else if (id == R.id.logout) {
+            new TaskRepositoryFactory().getRepository().logout();
+            startActivity(new Intent(MainActivity.this, Login.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

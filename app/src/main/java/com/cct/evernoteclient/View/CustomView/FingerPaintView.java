@@ -1,4 +1,4 @@
-package com.cct.evernoteclient;
+package com.cct.evernoteclient.View.CustomView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -42,7 +44,7 @@ public class FingerPaintView extends View {
         init(context);
     }
 
-    public void init(Context c){
+    public void init(Context c) {
         context = c;
         mPath = new Path();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -61,13 +63,23 @@ public class FingerPaintView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(92);
+        mPaint.setStrokeWidth(48);
     }
+
+    public void clear() {
+        setDrawingCacheEnabled(false);
+        onSizeChanged(width, height, width, height);
+        invalidate();
+        setDrawingCacheEnabled(true);
+    }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
+        width = w;
+        height = h;
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
     }

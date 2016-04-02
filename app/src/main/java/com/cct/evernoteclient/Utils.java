@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Environment;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
 
@@ -75,32 +76,50 @@ public class Utils {
     }
 
     public static String detectText(Bitmap bitmap) {
-        Log.e("TAM1",bitmap.getHeight()+" /");
+        Log.e("TAM1", bitmap.getHeight() + " /");
 
         TessBaseAPI.ProgressNotifier progres = new TessBaseAPI.ProgressNotifier() {
             @Override
             public void onProgressValues(TessBaseAPI.ProgressValues progressValues) {
-                Log.e("PROGRE",progressValues.getPercent()+" /");
+                Log.e("PROGRE", progressValues.getPercent() + " /");
             }
         };
         TessBaseAPI baseApi = new TessBaseAPI(progres);
         baseApi.setDebug(true);
-        baseApi.init(Environment.getExternalStorageDirectory()+"/", "eng");
+        baseApi.init(Environment.getExternalStorageDirectory() + "/", "eng");
 
         //baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_CHAR);
         baseApi.setImage(bitmap);
         String recognizedText = baseApi.getUTF8Text();
-        Log.e("Texto leido", "texto: "+recognizedText);
+        Log.e("Texto leido", "texto: " + recognizedText);
         baseApi.end();
         return recognizedText;
     }
 
     public static Bitmap loadBitmapFromView(View v) {
-        Bitmap b = Bitmap.createBitmap( v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         c.drawColor(Color.WHITE);
         v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
         v.draw(c);
         return b;
+    }
+
+    public static void showProgres(Activity act, final ContentLoadingProgressBar pb) {
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pb.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public static void dismissProgres(Activity act, final ContentLoadingProgressBar pb) {
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pb.setVisibility(View.GONE);
+            }
+        });
     }
 }
