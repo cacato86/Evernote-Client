@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity
         new TaskRepositoryFactory().getRepository().getNotes(filter, new TaskResultInterface<ArrayList<Note>>() {
             @Override
             public void onSucces(ArrayList<Note> result) {
-                Log.e("TAM",result.size()+" /");
                 if (result.size() > 0){
                     arrayNotes = result;
                     adapter.setNoteArray(result);
+                    emptyview.setVisibility(View.GONE);
                 }else{
                     emptyview.setVisibility(View.VISIBLE);
                 }

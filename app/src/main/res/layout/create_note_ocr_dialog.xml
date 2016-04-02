@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <com.cct.evernoteclient.View.CustomView.RelativeOCR
         android:id="@+id/title"
-        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
-        android:hint="@string/title" />
+        android:layout_marginTop="16dp"
+        android:hint="@string/title"
+        android:inputType="text" />
+
     <com.cct.evernoteclient.View.CustomView.RelativeOCR
         android:id="@+id/content"
-        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
-        android:hint="@string/content"/>
+        android:hint="@string/content"
+        android:inputType="text" />
 </LinearLayout>

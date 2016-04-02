@@ -7,7 +7,7 @@
     <application
         android:name=".EvernoteClientApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -32,18 +32,6 @@
         <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
         <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity" />
 
-
-        <service
-            android:name="com.cct.evernoteclient.View.CustomView.InputOCR"
-            android:permission="android.permission.BIND_INPUT_METHOD" >
-            <intent-filter>
-                <action android:name="android.view.InputMethod" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.view.im"
-                android:resource="@xml/method" />
-        </service>
 
     </application>
 

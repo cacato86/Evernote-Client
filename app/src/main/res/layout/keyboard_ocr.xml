@@ -6,15 +6,15 @@
     <com.cct.evernoteclient.View.CustomView.FingerPaintView
         android:id="@+id/fingerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/del"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:layout_margin="10dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="10dip"
         android:src="@android:drawable/ic_menu_delete" />
 
 </RelativeLayout>

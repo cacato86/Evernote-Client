@@ -3,32 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <Button
+        android:id="@+id/btn"
         android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:id="@+id/btn"/>
+        android:layout_height="40dip" />
 
     <com.cct.evernoteclient.View.CustomView.RelativeOCR
         android:id="@+id/rl_ocr"
-        android:layout_below="@id/btn"
         android:layout_width="match_parent"
-        android:layout_height="50dip" />
+        android:layout_height="50dip"
+        android:layout_below="@id/btn" />
 
     <com.cct.evernoteclient.View.CustomView.FingerPaintView
         android:id="@+id/fingerView"
-        android:layout_below="@+id/rl_ocr"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <ImageView android:id="@+id/img"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_ocr" />
+
+    <ImageView
+        android:id="@+id/img"
         android:layout_width="160dip"
         android:layout_height="160dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
-    <ImageView android:id="@+id/img1"
+        android:layout_alignParentRight="true" />
+
+    <ImageView
+        android:id="@+id/img1"
         android:layout_width="160dip"
         android:layout_height="160dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true" />
 
 
 </RelativeLayout>

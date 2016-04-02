@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
-import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
 import com.cct.evernoteclient.Domain.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.View.NoteDetailHtml;

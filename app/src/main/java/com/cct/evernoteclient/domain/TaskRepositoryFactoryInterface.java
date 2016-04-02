@@ -1,6 +1,7 @@
 package com.cct.evernoteclient.Domain;
 
 import android.app.Activity;
+import android.app.Application;
 
 import com.cct.evernoteclient.Models.Filter;
 import com.cct.evernoteclient.Models.Note.Note;
@@ -12,6 +13,9 @@ import java.util.ArrayList;
  * Created by carloscarrasco on 30/3/16.
  */
 public interface TaskRepositoryFactoryInterface {
+
+    void initializeSDK(Application app);
+
     void login(Activity activity);
 
     void logout();

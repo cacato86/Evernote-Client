@@ -1,7 +1,7 @@
 package com.cct.evernoteclient.Domain;
 
 import android.app.Activity;
-import android.util.Log;
+import android.app.Application;
 
 import com.cct.evernoteclient.Models.Filter;
 import com.cct.evernoteclient.Models.Filter.FilterBuilder.FilterOrder;
@@ -27,11 +27,25 @@ import java.util.ArrayList;
  */
 public class EvernoteRepository implements TaskRepositoryFactoryInterface {
 
+    private static final String CONSUMER_KEY = "cacato86-4186";
+    private static final String CONSUMER_SECRET = "efa4d57f3ba30bd0";
+    private static final EvernoteSession.EvernoteService EVERNOTE_SERVICE = EvernoteSession.EvernoteService.SANDBOX;
+    private static final boolean SUPPORT_APP_LINKED_NOTEBOOKS = true;
+
     private String notLoggedError = "You should register in Evernote for use this app";
     private int MAX_NOTES = 100;
 
     private boolean isLogged() {
         return EvernoteSession.getInstance().isLoggedIn();
+    }
+
+    @Override
+    public void initializeSDK(Application app) {
+        new EvernoteSession.Builder(app)
+                .setEvernoteService(EVERNOTE_SERVICE)
+                .setSupportAppLinkedNotebooks(SUPPORT_APP_LINKED_NOTEBOOKS)
+                .build(CONSUMER_KEY, CONSUMER_SECRET)
+                .asSingleton();
     }
 
     @Override

@@ -24,6 +24,6 @@
         android:layout_height="35dip"
         android:layout_weight="1"
         android:src="@android:drawable/ic_input_delete"
-        android:tint="@android:color/black"/>
+        android:tint="@android:color/black" />
 
 </LinearLayout>

@@ -1,15 +1,14 @@
 package com.cct.evernoteclient;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Environment;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.View;
 
@@ -46,52 +45,12 @@ public class Utils {
         return sharedPref.getString("userName", "Unknown");
     }
 
-    public static File getFile(Activity activity) throws IOException {
-        AssetManager am = activity.getAssets();
-        InputStream inputStream = am.open("a");
-        return createFileFromInputStream(inputStream);
-    }
-
-    private static File createFileFromInputStream(InputStream inputStream) {
-
-        try {
-            File f = new File("file");
-            OutputStream outputStream = new FileOutputStream(f);
-            byte buffer[] = new byte[1024];
-            int length = 0;
-
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            outputStream.close();
-            inputStream.close();
-
-            return f;
-        } catch (IOException e) {
-            //Logging exception
-        }
-
-        return null;
-    }
-
     public static String detectText(Bitmap bitmap) {
-        Log.e("TAM1", bitmap.getHeight() + " /");
-
-        TessBaseAPI.ProgressNotifier progres = new TessBaseAPI.ProgressNotifier() {
-            @Override
-            public void onProgressValues(TessBaseAPI.ProgressValues progressValues) {
-                Log.e("PROGRE", progressValues.getPercent() + " /");
-            }
-        };
-        TessBaseAPI baseApi = new TessBaseAPI(progres);
+        TessBaseAPI baseApi = new TessBaseAPI();
         baseApi.setDebug(true);
         baseApi.init(Environment.getExternalStorageDirectory() + "/", "eng");
-
-        //baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_CHAR);
         baseApi.setImage(bitmap);
         String recognizedText = baseApi.getUTF8Text();
-        Log.e("Texto leido", "texto: " + recognizedText);
         baseApi.end();
         return recognizedText;
     }
@@ -105,21 +64,67 @@ public class Utils {
         return b;
     }
 
-    public static void showProgres(Activity act, final ContentLoadingProgressBar pb) {
-        act.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pb.setVisibility(View.VISIBLE);
-            }
-        });
+    final static String TARGET_BASE_PATH = "/sdcard/tessdata/";
+
+    public static void copyFilesToSdCard(Application app) {
+        File file = new File(TARGET_BASE_PATH);
+        if (!file.exists()) {
+            copyFileOrDir("", app);
+        }
     }
 
-    public static void dismissProgres(Activity act, final ContentLoadingProgressBar pb) {
-        act.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pb.setVisibility(View.GONE);
+    private static void copyFileOrDir(String path, Application app) {
+        AssetManager assetManager = app.getAssets();
+        String assets[] = null;
+        try {
+            assets = assetManager.list(path);
+            if (assets.length == 0) {
+                copyFile(path, app);
+            } else {
+                String fullPath = TARGET_BASE_PATH + path;
+                File dir = new File(fullPath);
+                if (!dir.exists() && !path.startsWith("images") && !path.startsWith("sounds") && !path.startsWith("webkit"))
+                    if (!dir.mkdirs())
+                        Log.e("tag", "could not create dir " + fullPath);
+                for (int i = 0; i < assets.length; ++i) {
+                    String p;
+                    if (path.equals(""))
+                        p = "";
+                    else
+                        p = path + "/";
+
+                    if (!path.startsWith("images") && !path.startsWith("sounds") && !path.startsWith("webkit"))
+                        copyFileOrDir(p + assets[i], app);
+                }
             }
-        });
+        } catch (IOException ex) {
+            Log.e("tag", "I/O Exception", ex);
+        }
+    }
+
+    private static void copyFile(String filename, Application app) {
+        AssetManager assetManager = app.getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        String newFileName = null;
+        try {
+            in = assetManager.open(filename);
+            newFileName = TARGET_BASE_PATH + filename;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            Log.e("tag", "Exception in copyFile() of " + newFileName);
+            Log.e("tag", "Exception in copyFile() " + e.toString());
+        }
+
     }
 }

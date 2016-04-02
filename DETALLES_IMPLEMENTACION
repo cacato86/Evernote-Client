@@ -1,0 +1,41 @@
+---- DETALLES DE USO DE LA APP DEMO -----
+
+Para probar la aplicación debes registar un usuario en el sandbox de desarrollo:
+
+https://sandbox.evernote.com/Login.action
+
+Si no quereis registrar un usuario os facilito uno ya creado:
+
+user: carlos_carrasco_bq@gmail.com
+password: bq_rocks
+
+---- DETALLES DE IMPLEMENTACIÓN -----
+
+El concepto principal que he intentado en esta aplicación ha sido encampsular el SDK de Evernote
+en un wrapper para no depender de los detalles de implementación (Principio de inversión de dependencias)
+
+Para ello he creado varios módulos que se rigen por interfaces, las cuales modelan los comportamientos
+necesarios en nuestra app. A continuación explicaré la función de cada paquete y el "comportamiento" que debe
+realizar:
+
+- Creator: Este paquete será el encargado de crear notas de diversas formas (en este ejemplo mediante
+el uso del teclado tradicional o mediante el reconocimiento OCR). Como hemos explicado arriba
+hemos crado una interfaz para definir el comportamiento de este paquete. Cualquier implementación que
+queramos realizar para crear una nota debera implementar esta interfaz por lo tanto siempre que quiera
+crear una nota desde mi código, llamaré siempre a la misma función "createNote" y no me importará la
+forma de como esté implementado.
+
+- Domain: Paquete encargado de realizar las peticiones y obtener los datos necesarios en la aplicación
+
+- Models: Siguiendo el mismo principio que anteriormente, hemos desacoplado las concreciones del SDK de evernote
+para que en un futuro se pudiera añadir cualquier otro SDK sin modificar nada del código. Para ellos nos
+hemos creado nuestra propia Nota y nuestro propio Usuario
+
+- View: En este último paquete está toda la parte de representación gráfica de la app. Se ha utilizado el patrón
+MVVM con data biding. Además se han creado varias Custom Views para facilitar el uso del OCR
+
+- El flujo de entrada de la aplicación lo realiza el RouterManager, el cual se encarga de ver si el usuario
+está logeado para mandarla a un sitio o a otro.
+
+- Por último en la clase application guardamos en la memoria del teléfono el archivo que tenemos en
+assets, el cual es necesario para el correcto funcionamiento de la tecnología OCR.

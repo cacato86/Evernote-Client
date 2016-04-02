@@ -1,6 +1,5 @@
 package com.cct.evernoteclient.View.CustomView;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -42,7 +41,6 @@ public class EditTextOCR extends EditText {
     }
 
     public void init(final Context context) {
-        Log.e("init", "init");
         this.context = context;
 
         this.setOnTouchListener(new OnTouchListener() {
@@ -88,7 +86,7 @@ public class EditTextOCR extends EditText {
                     }
                 });
 
-        final AlertDialog dialog =  builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
