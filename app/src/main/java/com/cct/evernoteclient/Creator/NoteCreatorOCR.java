@@ -46,9 +46,11 @@ public class NoteCreatorOCR implements NoteCreatorInterface {
 
         RelativeOCR title = (RelativeOCR) view.findViewById(R.id.title);
         final EditTextOCR editOCRTitle = title.getEditOCR();
+        editOCRTitle.setHint(activity.getResources().getString(R.string.title));
 
         RelativeOCR content = (RelativeOCR) view.findViewById(R.id.content);
         final EditTextOCR editOCRContent = content.getEditOCR();
+        editOCRContent.setHint(activity.getResources().getString(R.string.content));
 
         builder.setView(view)
                 .setPositiveButton(R.string.create_note, new DialogInterface.OnClickListener() {

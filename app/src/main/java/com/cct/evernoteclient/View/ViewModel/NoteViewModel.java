@@ -3,10 +3,8 @@ package com.cct.evernoteclient.View.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
-import android.databinding.BindingAdapter;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cct.evernoteclient.Domain.ErrorManager;
@@ -34,20 +32,9 @@ public class NoteViewModel extends BaseObservable {
 
     public void onItemClick(final View view) {
         final Context context = view.getContext();
-        new NoteRepresentationFactory().getNoteRepresentation().getNoteDataForRepresentation(note, new TaskResultInterface<String>() {
-            @Override
-            public void onSucces(String result) {
-                Intent intent = new Intent(context, NoteDetailHtml.class);
-                intent.putExtra("note_html", result);
-                intent.putExtra("title", note.getTitle());
-                context.startActivity(intent);
-            }
-
-            @Override
-            public void onError(ErrorManager error) {
-                Toast.makeText(context, error.getReason(), Toast.LENGTH_LONG).show();
-            }
-        });
+        Intent intent = new Intent(context, NoteDetailHtml.class);
+        intent.putExtra("note", note);
+        context.startActivity(intent);
     }
 
     public String getTitle() {
@@ -55,7 +42,7 @@ public class NoteViewModel extends BaseObservable {
     }
 
     public String getAuthor() {
-        String author = ( note.getAuthor() != null) ? note.getAuthor() : "Unknown";
+        String author = (note.getAuthor() != null) ? note.getAuthor() : "Unknown";
         return author;
     }
 
@@ -69,35 +56,10 @@ public class NoteViewModel extends BaseObservable {
                     timeStampNow,
                     DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL);
 
-            return realTime.toString();
+            String realTimeString = realTime.toString();
+
+            return realTimeString.substring(0, 1).toUpperCase() + realTimeString.substring(1);
         }
         return "";
-    }
-
-    public Note getNote() {
-        return note;
-    }
-
-    @BindingAdapter({"loadBitmap"})
-    public static void loadBitmap(final ImageView view, final Note noteMethod) {
-        /*final EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-        noteStoreClient.getNoteAsync(noteMethod.getGuid(), true, true, true, true, new EvernoteCallback<Note>() {
-            @Override
-            public void onSuccess(Note result) {
-                Iterator<Resource> iterator = result.getResourcesIterator();
-                Resource resource = iterator.next();
-                Log.e("LOAD1", resource.toString());
-
-                Glide.with(view.getContext()).load(resource.getData().getBody()).into(view);
-
-                //Bitmap bitmap = BitmapFactory.decodeByteArray(resource.getData().getBody(), 0, resource.getData().getSize());
-                //view.setImageBitmap(bitmap);
-            }
-
-            @Override
-            public void onException(Exception exception) {
-                exception.printStackTrace();
-            }
-        });*/
     }
 }
