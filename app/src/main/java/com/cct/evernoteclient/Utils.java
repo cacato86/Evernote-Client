@@ -67,10 +67,10 @@ public class Utils {
     final static String TARGET_BASE_PATH = "/sdcard/tessdata/";
 
     public static void copyFilesToSdCard(Application app) {
-        File file = new File(TARGET_BASE_PATH);
-        if (!file.exists()) {
+        //File file = new File(TARGET_BASE_PATH);
+        //if (!file.exists()) {
             copyFileOrDir("", app);
-        }
+        //}
     }
 
     private static void copyFileOrDir(String path, Application app) {

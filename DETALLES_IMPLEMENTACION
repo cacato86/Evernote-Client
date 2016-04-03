@@ -41,3 +41,7 @@ está logeado para mandarlo a un sitio o a otro.
 
 - Por último en la clase application guardamos en la memoria del teléfono el archivo que tenemos en
 assets, el cual es necesario para el correcto funcionamiento de la tecnología OCR.
+
+PD: Recomiendo compilar la aplicación y probarla. Se que la parte gráfica no se tenía en cuenta
+pero en mi caso sí que he querido trabajarla y dejar una aplicación bastante completa y creo que ha
+quedado un resultado bastante bueno. Además la forma de interactuar con el OCR es bastante vistoso :D
