@@ -2,7 +2,7 @@ package com.cct.evernoteclient;
 
 import android.app.Application;
 
-import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
+import com.cct.evernoteclient.Domains.TaskRepositoryFactory;
 
 /**
  * Created by carloscarrasco on 30/3/16.

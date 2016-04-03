@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.cct.evernoteclient.Domain.ErrorManager;
-import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
-import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Domains.ErrorManager;
+import com.cct.evernoteclient.Domains.TaskRepositoryFactory;
+import com.cct.evernoteclient.Domains.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.Utils;

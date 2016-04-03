@@ -1,4 +1,4 @@
-package com.cct.evernoteclient.Domain;
+package com.cct.evernoteclient.Domains;
 
 import android.app.Activity;
 import android.app.Application;

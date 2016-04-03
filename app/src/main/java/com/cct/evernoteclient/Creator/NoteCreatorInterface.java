@@ -1,6 +1,6 @@
 package com.cct.evernoteclient.Creator;
 
-import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Domains.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 
 /**

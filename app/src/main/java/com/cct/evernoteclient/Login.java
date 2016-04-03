@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
-import com.cct.evernoteclient.Domain.TaskRepositoryFactory;
+import com.cct.evernoteclient.Domains.TaskRepositoryFactory;
 import com.evernote.client.android.EvernoteSession;
 
 /**

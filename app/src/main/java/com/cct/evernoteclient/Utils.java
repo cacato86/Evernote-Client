@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
-import com.cct.evernoteclient.Domain.ErrorManager;
+import com.cct.evernoteclient.Domains.ErrorManager;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;

@@ -1,6 +1,6 @@
 package com.cct.evernoteclient.View.NoteViewManager;
 
-import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Domains.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.Utils;
 import com.evernote.client.android.EvernoteSession;

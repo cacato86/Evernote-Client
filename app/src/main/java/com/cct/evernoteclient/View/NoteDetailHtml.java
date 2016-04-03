@@ -13,8 +13,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.cct.evernoteclient.Domain.ErrorManager;
-import com.cct.evernoteclient.Domain.TaskResultInterface;
+import com.cct.evernoteclient.Domains.ErrorManager;
+import com.cct.evernoteclient.Domains.TaskResultInterface;
 import com.cct.evernoteclient.Models.Note.Note;
 import com.cct.evernoteclient.R;
 import com.cct.evernoteclient.View.NoteViewManager.NoteRepresentationFactory;
