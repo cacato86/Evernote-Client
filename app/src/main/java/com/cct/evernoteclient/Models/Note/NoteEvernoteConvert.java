@@ -4,7 +4,7 @@ import com.evernote.edam.type.NoteAttributes;
 /**
  * Created by carloscarrasco on 1/4/16.
  */
-public class NoteEvernoteConverter<T> implements NoteConverterInterface {
+public class NoteEvernoteConvert<T> implements NoteConverterInterface {
 
     @Override
     public Note convertEspecificNoteToMyNote(Object note) {

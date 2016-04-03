@@ -5,10 +5,10 @@ package com.cct.evernoteclient.Models.Note;
  */
 public class NoteManager<T> {
     public Note convertEspecificNoteToMyNote(T note) {
-        return new NoteEvernoteConverter().convertEspecificNoteToMyNote(note);
+        return new NoteEvernoteConvert().convertEspecificNoteToMyNote(note);
     }
 
     public T convertMyNoteToEspecificNote(Note note){
-        return (T) new NoteEvernoteConverter().convertMyNoteToEspecificNote(note);
+        return (T) new NoteEvernoteConvert().convertMyNoteToEspecificNote(note);
     }
 }
